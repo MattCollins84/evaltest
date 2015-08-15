@@ -1,0 +1,10 @@
+{
+  "name": "eatest",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "ejs": "~2.3.3",
+    "express": "~4.13.1",
+    "node-uuid": "^1.4.3"
+  }
+}

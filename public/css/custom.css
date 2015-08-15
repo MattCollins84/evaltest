@@ -1,0 +1,21 @@
+/*****************
+  UTILITY
+*****************/
+.hidden {
+  display: none;
+}
+
+/*****************
+  MARGINS
+*****************/
+.mt10 {
+  margin-top: 8px;
+}
+
+.mt60 {
+  margin-top: 60px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}

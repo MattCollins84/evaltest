@@ -1,0 +1,109 @@
+<% include ./partials/header %>
+    
+    <div class="container mt60">
+
+      <div class="well">
+        <h1>Add a new Staff member</h1>
+        <p class="lead">Complete the form below to add a new member of staff.</p>
+      </div>
+
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-md-4">
+          
+          <div class="panel panel-default">
+            <div class="panel-body">
+
+              <form>
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <label for="name">Role</label>
+                  <input type="text" class="form-control" id="role" name="role" placeholder="Role">
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone number</label>
+                  <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number">
+                </div>
+                
+                <button type="submit" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+
+                <div class="alert alert-success mt10 hidden">
+                  <h4>Thank You</h4>
+                  <p>Your new staff member has been successfully added, go <a href="/staff/list">here</a> to view.</p>
+                </div>
+
+                <div class="alert alert-danger mt10 hidden">
+                  <h4>Oops!</h4>
+                  <p class="error-msg"></p>
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+
+    $("form").submit(function(e) {
+
+      // stop the default action
+      e.preventDefault();
+
+      // capture relevant elements
+      var form = $(this);
+      var submitButton = form.children("button");
+      var successAlert = form.children(".alert-success");
+      var errorAlert = form.children(".alert-danger");
+      var errorMsg = errorAlert.children(".error-msg");
+
+      // make sure the form is in a good default state
+      successAlert.addClass("hidden");
+      errorAlert.addClass("hidden");
+
+      // gather the form data
+      var formData = {};
+      $.each($(this).serializeArray(), function(i, obj) {
+        formData[obj.name] = obj.value;
+      });
+
+      // disable the submit button
+      submitButton.attr("disabled", true)
+
+      // submit the edits
+      $.post("/staff/add", formData, function( data ) {
+        
+        // enable the submit button
+        submitButton.attr("disabled", false);
+        
+        // successful response
+        if (data.success === true) {
+          successAlert.removeClass("hidden");
+        }
+
+        // erroroneous response
+        if (data.success === false) {
+          errorMsg.text(data.error);
+          errorAlert.removeClass("hidden");
+        }
+
+      });
+
+    });
+
+    </script>
+
+<% include ./partials/footer %>

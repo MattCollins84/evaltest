@@ -1,0 +1,111 @@
+<% include ./partials/header %>
+    
+    <div class="container mt60">
+
+      <div class="well">
+        <h1>Staff List</h1>
+        <% if (staff.length) { %>
+          <p class="lead">This is a list of current staff, you can edit them individually.</p>
+        <% } else { %>
+          <p class="lead">There are no staff at the moment, why not <a href="/staff/new">add one</a>?</p>
+        <% } %>
+      </div>
+
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+        
+        <% staff.forEach(function(s) { %>
+
+        <div class="col-md-4">
+          
+          <div class="panel panel-default">
+            <div class="panel-body">
+
+              <form id="form-<%= s.id %>">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<%= s.name %>">
+                </div>
+                <div class="form-group">
+                  <label for="name">Role</label>
+                  <input type="text" class="form-control" id="role" name="role" placeholder="Role" value="<%= s.role %>">
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone number</label>
+                  <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number" value="<%= s.phone %>">
+                </div>
+
+                <input type="hidden" name="id" value="<%= s.id %>">
+                
+                <button type="submit" class="btn btn-default btn-success"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+
+                <span class="label label-success pull-right hidden">Successfully Updated</span>
+                <span class="label label-danger pull-right hidden"></span>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <% }); %>
+
+      </div>
+
+    </div>
+
+    <script>
+
+    $("form").submit(function(e) {
+
+      // stop the default action
+      e.preventDefault();
+
+      // capture relevant elements
+      var form = $(this);
+      var submitButton = form.children("button");
+      var successLabel = form.children(".label-success");
+      var errorLabel = form.children(".label-danger");
+
+      // make sure the form is in a good default state
+      successLabel.addClass("hidden");
+      errorLabel.addClass("hidden");
+
+      // gather the form data
+      var formData = {};
+      $.each($(this).serializeArray(), function(i, obj) {
+        formData[obj.name] = obj.value;
+      });
+
+      // disable the submit button
+      submitButton.attr("disabled", true)
+
+      // submit the edits
+      $.post("/staff/edit", formData, function( data ) {
+        
+        // enable the submit button
+        submitButton.attr("disabled", false);
+        
+        // successful response
+        if (data.success === true) {
+          successLabel.removeClass("hidden");
+        }
+
+        // erroroneous response
+        if (data.success === false) {
+          errorLabel.text(data.error);
+          errorLabel.removeClass("hidden");
+        }
+
+      });
+
+    });
+
+    </script>
+
+<% include ./partials/footer %>
